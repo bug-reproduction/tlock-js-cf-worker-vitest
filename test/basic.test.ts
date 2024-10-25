@@ -21,4 +21,16 @@ describe("Hello World worker", () => {
     await waitOnExecutionContext(ctx);
     expect(await response.text()).toBe("Hello Hono!");
   });
+
+  it("responds with correct round!", async () => {
+    const request = new IncomingRequest(
+      "http://example.com/rountAt/1729873909000"
+    );
+    // Create an empty context to pass to `worker.fetch()`
+    const ctx = createExecutionContext();
+    const response = await worker.fetch(request, env, ctx);
+    // Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
+    await waitOnExecutionContext(ctx);
+    expect(await response.json()).toEqual({ round: 12356848 });
+  });
 });
